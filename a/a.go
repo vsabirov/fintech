@@ -30,13 +30,11 @@ func optionalEnv(log *logrus.Logger, key string, zv string) string {
 func main() {
 	log := logrus.New()
 
-	kafkaPort := optionalEnv(log, "KAFKA_PORT", "9092")
+	kafkaPort := optionalEnv(log, "KAFKA_PORT", "9094")
 	kafkaHost := optionalEnv(log, "KAFKA_HOST", "localhost")
-	kafkaTopic := optionalEnv(log, "KAFKA_TOPIC", "fintech-services")
 
 	kafkaWriter := &kafka.Writer{
 		Addr:                   kafka.TCP(kafkaHost + ":" + kafkaPort),
-		Topic:                  kafkaTopic,
 		Balancer:               &kafka.LeastBytes{},
 		AllowAutoTopicCreation: true,
 	}
@@ -63,6 +61,7 @@ func main() {
 	}))
 
 	server.Use(middleware.Recover())
+	server.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(10)))
 
 	server.GET("/accounts/:account-id/balance", handlers.GetBalanceHandler)
 	server.POST("/accounts/:account-id/transfer", handlers.TransferHandler)
