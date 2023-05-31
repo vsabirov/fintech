@@ -28,6 +28,17 @@ docker compose up -d
 in the root directory of the project. Wait until all containers are built and started.
 
 
+Install `tern` if you don't have it installed already.
+```
+go install github.com/jackc/tern@latest
+```
+
+Run `tern` migrations to create required DB tables.
+```
+cd ./b/migrations/
+tern migrate
+```
+
 You can interact with Kafka and Postgres using kowl and pgweb (available at ports 8080 and 8081 respectively), and send HTTP requests to Service A using any HTTP client (Insomnia, for example). Service A will be available at port 2500.
 
 Create 2 users with any ids and balance total through pgweb. 
