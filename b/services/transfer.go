@@ -28,6 +28,10 @@ func Transfer(request TransferRequest, sctx servicectx.ServiceContext) error {
 		Sender:   request.Sender,
 	})
 
+	if err != nil {
+		return err
+	}
+
 	go func() {
 		time.Sleep(time.Second * 30)
 
