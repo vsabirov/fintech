@@ -11,10 +11,10 @@ import (
 var TransferTopic string = "transfer"
 
 type TransferRequest struct {
-	ID     string  `json:"id" xml:"id"`
-	Amount float64 `json:"amount" xml:"amount"`
+	ID     string  `json:"id" xml:"id" validate:"required"`
+	Amount float64 `json:"amount" xml:"amount" validate:"required"`
 
-	Receiver string `json:"receiver" xml:"receiver"`
+	Receiver string `json:"receiver" xml:"receiver" validate:"required"`
 	Sender   string `json:"sender" xml:"sender"`
 }
 

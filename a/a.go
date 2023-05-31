@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
@@ -11,6 +12,7 @@ import (
 
 	"github.com/vsabirov/fintech/a/handlers"
 	"github.com/vsabirov/fintech/a/servicectx"
+	"github.com/vsabirov/fintech/a/validators"
 )
 
 func optionalEnv(log *logrus.Logger, key string, zv string) string {
@@ -62,6 +64,8 @@ func main() {
 
 	server.Use(middleware.Recover())
 	server.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(10)))
+
+	server.Validator = &validators.TransferValidator{Validator: validator.New()}
 
 	server.POST("/accounts/:account-id/transfer", handlers.TransferHandler)
 
