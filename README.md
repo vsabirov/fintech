@@ -8,7 +8,7 @@ Sends all requests to service B through kafka.
 Go + Echo + Kafka-Go
 
 
-Service B - Request operator, receives requests from kafka and sends responses to kafka.
+Service B - Request operator, receives requests from kafka and sends queries to Postgres.
 Go + Kafka-Go + PGX
 
 # Service dependencies
