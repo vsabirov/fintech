@@ -1,7 +1,7 @@
 # Services
 Service A - RESTful HTTP Server, listens for the following endpoints:
 ```
-POST { id: <string>, amount: <number>, receiver: <string> } -> /accounts/<account-id>/transfer -> 201 or 404
+POST { id: <string>, amount: <number>, receiver: <string> } -> /accounts/<account-id>/transfer -> 201
 ```
 
 Sends all requests to service B through kafka.
