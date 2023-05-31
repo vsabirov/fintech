@@ -63,3 +63,11 @@ time="2023-05-31T18:43:28+03:00" level=error msg="Failed to process transfer req
 ```
 
 No new transfer was created.
+
+Transfers can be randomly marked as invalid after 30 seconds from processing. In that case, the transfer will be removed from database and account funds will return back to their owner.
+
+```
+2023-05-31 20:12:34 time="2023-05-31T17:12:34Z" level=warning msg="Transfer was marked invalid, trying to restore account funds." request="{2 500.5 b a}"
+
+2023-05-31 20:12:34 time="2023-05-31T17:12:34Z" level=info msg="Funds restored successfully." request="{2 500.5 b a}"
+```
