@@ -1,6 +1,34 @@
 version: "2.18"
 
 services:
+  service_a:
+    build: ./a
+    restart: on-failure
+    ports:
+      - "2500:2500"
+    environment:
+      KAFKA_HOST: "10.1.0.15"
+      KAFKA_PORT: "9092"
+    depends_on:
+      - kafka
+    networks:
+      fintech:
+        ipv4_address: 10.1.0.35
+    
+  service_b:
+    build: ./b
+    restart: on-failure
+    environment:
+      KAFKA_HOST: "10.1.0.15"
+      KAFKA_PORT: "9092"
+      DB_DSN: "user=root password=1fintechpassword1 host=10.1.0.10 port=5432 dbname=fintech sslmode=disable pool_max_conns=10"
+    depends_on:
+      - kafka
+      - postgres
+    networks:
+      fintech:
+        ipv4_address: 10.1.0.30
+
   pgweb:
     image: sosedoff/pgweb
     restart: on-failure
