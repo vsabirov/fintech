@@ -9,8 +9,8 @@ import (
 	"github.com/segmentio/kafka-go"
 	"github.com/sirupsen/logrus"
 
-	"github.com/vsabirov/fintech/a/context"
 	"github.com/vsabirov/fintech/a/handlers"
+	"github.com/vsabirov/fintech/a/servicectx"
 )
 
 func optionalEnv(log *logrus.Logger, key string, zv string) string {
@@ -34,15 +34,18 @@ func main() {
 	kafkaHost := optionalEnv(log, "KAFKA_HOST", "localhost")
 	kafkaTopic := optionalEnv(log, "KAFKA_TOPIC", "fintech-services")
 
-	kafkaWriter := kafka.NewWriter(kafka.WriterConfig{
-		Brokers: []string{kafkaHost + ":" + kafkaPort},
-		Topic:   kafkaTopic,
-	})
+	kafkaWriter := &kafka.Writer{
+		Addr:                   kafka.TCP(kafkaHost + ":" + kafkaPort),
+		Topic:                  kafkaTopic,
+		Balancer:               &kafka.LeastBytes{},
+		AllowAutoTopicCreation: true,
+	}
 
 	server := echo.New()
 
-	server.Use(context.ServiceContextExtender(context.ServiceContextConfig{
-		KafkaWriter: kafkaWriter,
+	server.Use(servicectx.ServiceContextExtender(servicectx.ServiceContextConfig{
+		KafkaWriter:   kafkaWriter,
+		ServiceLogger: log,
 	}))
 
 	server.Use(middleware.RequestLoggerWithConfig(middleware.RequestLoggerConfig{

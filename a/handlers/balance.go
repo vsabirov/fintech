@@ -4,16 +4,12 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+
+	"github.com/vsabirov/fintech/a/services"
 )
 
-type getBalanceResponse struct {
-	Balance float64 `json:"balance" xml:"balance"`
-}
-
 func GetBalanceHandler(ctx echo.Context) error {
-	response := &getBalanceResponse{
-		Balance: 1337.5,
-	}
+	response := services.GetBalance(ctx.Param("account-id"))
 
 	return ctx.JSON(http.StatusOK, response)
 }
