@@ -63,7 +63,6 @@ func main() {
 	server.Use(middleware.Recover())
 	server.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(10)))
 
-	server.GET("/accounts/:account-id/balance", handlers.GetBalanceHandler)
 	server.POST("/accounts/:account-id/transfer", handlers.TransferHandler)
 
 	port := optionalEnv(log, "SERVICE_A_PORT", "2500")

@@ -31,20 +31,29 @@ func ProcessMessages(ctx context.Context, sctx servicectx.ServiceContext) {
 		}
 
 		sctx.Logger.WithFields(logrus.Fields{
-			"message": message,
+			"topic":   message.Topic,
+			"message": string(message.Value),
 		}).Info("Processing new message.")
 
 		switch message.Topic {
 		case TransferTopic:
 			go func() {
-				err = Transfer(message)
+				err = Transfer(message, sctx)
 
 				if err != nil {
 					sctx.Logger.WithFields(logrus.Fields{
-						"message": message,
+						"topic":   message.Topic,
 						"error":   err,
+						"message": string(message.Value),
 					}).Error("Failed to process transfer request.")
+
+					return
 				}
+
+				sctx.Logger.WithFields(logrus.Fields{
+					"topic":   message.Topic,
+					"message": string(message.Value),
+				}).Info("Transfer request processed successfully.")
 			}()
 		}
 	}

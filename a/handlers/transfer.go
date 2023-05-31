@@ -17,6 +17,8 @@ func TransferHandler(ctx echo.Context) error {
 		return ctx.NoContent(http.StatusBadRequest)
 	}
 
+	body.Sender = ctx.Param("account-id")
+
 	sctx := ctx.(*servicectx.ServiceContext)
 
 	err = services.Transfer(body, sctx.KafkaWriter)

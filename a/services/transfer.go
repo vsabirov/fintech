@@ -11,9 +11,11 @@ import (
 var TransferTopic string = "transfer"
 
 type TransferRequest struct {
-	ID       string  `json:"id" xml:"id"`
-	Amount   float64 `json:"amount" xml:"amount"`
-	Receiver string  `json:"receiver" xml:"receiver"`
+	ID     string  `json:"id" xml:"id"`
+	Amount float64 `json:"amount" xml:"amount"`
+
+	Receiver string `json:"receiver" xml:"receiver"`
+	Sender   string `json:"sender" xml:"sender"`
 }
 
 func Transfer(request TransferRequest, kafkaWriter *kafka.Writer) error {
